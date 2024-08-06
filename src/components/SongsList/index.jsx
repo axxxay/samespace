@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { SongItem } from "./SongItem";
 import { Audio } from "react-loader-spinner";
+import { useState } from "react";
 
 const apiStatusConstants = {
     initial: 'INITIAL',
@@ -10,47 +10,21 @@ const apiStatusConstants = {
     failure: 'FAILURE'
 }
 
-export const SongsList = ({onSelectSong, selectedSong}) => {
+export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, setSearchInput, apiStatus, fetchSongs}) => {
 
-    const [searchInput, setSearchInput] = useState('');
-    const [songsList, setSongsList] = useState([]);
-    const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
+    const [activeTab, setActiveTab] = useState('FOR_YOU');
 
     const onSearchInputChange = (e) => {
         setSearchInput(e.target.value);
     }
 
-    useEffect(() => {
-        setApiStatus(apiStatusConstants.inProgess);
-        const delayDebounceFn = setTimeout(() => {
-            fetchSongs();
-        }, 2000);
-
-        return () => clearTimeout(delayDebounceFn);
-    }, [searchInput]);
-
-    const fetchSongs = async () => {
-        try {
-            setApiStatus(apiStatusConstants.inProgess);
-            const url = `${process.env.REACT_APP_SONGS_API_URL}?search=${searchInput}`;
-            const response = await fetch(url);
-            if (response.ok === true) {
-                const data = await response.json();
-                console.log(data.data);
-                setSongsList(data.data);
-                setApiStatus(apiStatusConstants.success);
-            } else {
-                console.error('Error fetching songs');
-                setApiStatus(apiStatusConstants.failure);
-            }
-        } catch (error) {
-            console.error(error);
-            setApiStatus(apiStatusConstants.failure);
-        }
+    let filteredSongsList = songsList
+    if (activeTab === 'TOP_TRACKS') {
+        filteredSongsList = songsList.filter(song => song.top_track)
     }
 
     const renderSongsList = () => (
-        songsList.map(song => <SongItem key={song.id} song={song} onSelectSong={onSelectSong} selectedSong={selectedSong} />)
+        filteredSongsList.map(song => <SongItem key={song.id} song={song} onSelectSong={onSelectSong} selectedSong={selectedSong} />)
     )
 
     const renderNoSongsFound = () => (
@@ -103,8 +77,8 @@ export const SongsList = ({onSelectSong, selectedSong}) => {
             </div>
             <div className='min-h-[calc(100vh-48px)] flex flex-col items-start max-w-80% w-[400px]'>
                 <div className='flex items-center mt-1'>
-                    <button className='text-white text-2xl mr-10 font-bold font-[inter] border-none bg-transparent p-0'>For You</button>
-                    <button className='text-white text-2xl font-bold font-[inter] border-none bg-transparent p-0'>Top Tracks</button>
+                    <button style={{opacity: activeTab === 'FOR_YOU' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-2xl mr-10 font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("FOR_YOU")}>For You</button>
+                    <button style={{opacity: activeTab === 'TOP_TRACKS' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-2xl font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("TOP_TRACKS")}>Top Tracks</button>
                 </div>
                 <div className='flex justify-between items-center bg-[#ffffff15] rounded-lg py-[8px] px-[16px] mt-6 w-full'>
                     <input 

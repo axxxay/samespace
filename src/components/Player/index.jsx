@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { FaEllipsisH } from 'react-icons/fa';
@@ -7,8 +6,7 @@ import { IoPlayBack, IoPlayForward } from "react-icons/io5";
 import { TbPlayerPauseFilled } from "react-icons/tb";
 import './style.css';
 
-export const Player = ({selectedSong}) => {
-
+export const Player = ({selectedSong, onClickNext, onClickPrevious}) => {
 
   return (
     <div className='w-full h-[100vh] md:w-1/2 flex flex-col justify-center items-center p-6'>
@@ -36,6 +34,8 @@ export const Player = ({selectedSong}) => {
           showSkipControls={true}
           showDownloadProgress={false}
           showFilledVolume={false}
+          onClickPrevious={onClickPrevious}
+          onClickNext={onClickNext}
         />
       </div>
     </div>

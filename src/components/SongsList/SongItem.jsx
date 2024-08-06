@@ -1,5 +1,3 @@
-
-
 export const SongItem = ({ song, onSelectSong, selectedSong }) => {
 
     const isSelected = selectedSong && selectedSong.id === song.id;
