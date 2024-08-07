@@ -16,6 +16,7 @@ const App = () => {
   const [searchInput, setSearchInput] = useState('');
   const [songsList, setSongsList] = useState([]);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
+  const [showSideBar, setShowSideBar] = useState(false);
 
   const [bgColor, setBgColor] = useState('#0B565B');
   const [selectedSong, setSelectedSong] = useState(null);
@@ -40,6 +41,9 @@ const App = () => {
               const data = await response.json();
               console.log(data.data);
               setSongsList(data.data);
+              if(data.data.length > 0) {
+                setSelectedSong(data.data[0]);
+              }
               setApiStatus(apiStatusConstants.success);
           } else {
               console.error('Error fetching songs');
@@ -88,7 +92,7 @@ const App = () => {
   return (
     <div
       ref={ref}
-      className='flex justify-between items-start'
+      className='flex justify-between items-start relative'
       style={{
         backgroundImage: `linear-gradient(270deg, ${bgColor}30, #000000, ${bgColor}30, #000000)`,
         backgroundColor: `${bgColor}`,
@@ -98,8 +102,8 @@ const App = () => {
         width: '100%',
       }}
     >
-      <SongsList onSelectSong={onSelectSong} selectedSong={selectedSong} searchInput={searchInput} setSearchInput={setSearchInput} songsList={songsList} apiStatus={apiStatus} fetchSongs={fetchSongs} />
-      {selectedSong && <Player selectedSong={selectedSong} onClickNext={onClickNext} onClickPrevious={onClickPrevious} />}
+      <SongsList onSelectSong={onSelectSong} selectedSong={selectedSong} searchInput={searchInput} setSearchInput={setSearchInput} songsList={songsList} apiStatus={apiStatus} fetchSongs={fetchSongs} showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
+      <Player selectedSong={selectedSong} onClickNext={onClickNext} onClickPrevious={onClickPrevious} setShowSideBar={setShowSideBar} />
     </div>
   );
 };
