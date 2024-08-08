@@ -21,9 +21,16 @@ const App = () => {
   const [bgColor, setBgColor] = useState('#0B565B');
   const [selectedSong, setSelectedSong] = useState(null);
 
+  const initialTab = new URLSearchParams(window.location.search).get('track') || 'FOR_YOU';
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+      window.history.replaceState(null, null, `?track=${activeTab}`);
+  }, [activeTab]);
+
   useEffect(() => {
     setApiStatus(apiStatusConstants.inProgess);
-    setSelectedSong(null);
+    // setSelectedSong(null);
     setBgColor('#0B565B');
     const delayDebounceFn = setTimeout(() => {
         fetchSongs();
@@ -41,7 +48,7 @@ const App = () => {
               const data = await response.json();
               console.log(data.data);
               setSongsList(data.data);
-              if(data.data.length > 0) {
+              if(data.data.length > 0 && !selectedSong) {
                 setSelectedSong(data.data[0]);
               }
               setApiStatus(apiStatusConstants.success);
@@ -58,9 +65,12 @@ const App = () => {
   const onClickNext = () => {
     const currentIndex = songsList.findIndex(song => song.id === selectedSong.id);
     if (currentIndex === songsList.length - 1) {
+      console.log(currentIndex)
       setSelectedSong(songsList[0]);
+      setBgColor(songsList[0].accent);
     } else {
       setSelectedSong(songsList[currentIndex + 1]);
+      setBgColor(songsList[currentIndex + 1].accent);
     }
   }
 
@@ -68,8 +78,10 @@ const App = () => {
     const currentIndex = songsList.findIndex(song => song.id === selectedSong.id);
     if (currentIndex === 0) {
       setSelectedSong(songsList[songsList.length - 1]);
+      setBgColor(songsList[songsList.length - 1].accent);
     } else {
       setSelectedSong(songsList[currentIndex - 1]);
+      setBgColor(songsList[currentIndex - 1].accent);
     }
   }
 
@@ -102,7 +114,7 @@ const App = () => {
         width: '100%',
       }}
     >
-      <SongsList onSelectSong={onSelectSong} selectedSong={selectedSong} searchInput={searchInput} setSearchInput={setSearchInput} songsList={songsList} apiStatus={apiStatus} fetchSongs={fetchSongs} showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
+      <SongsList onSelectSong={onSelectSong} selectedSong={selectedSong} searchInput={searchInput} setSearchInput={setSearchInput} songsList={songsList} apiStatus={apiStatus} fetchSongs={fetchSongs} showSideBar={showSideBar} setShowSideBar={setShowSideBar} activeTab={activeTab} setActiveTab={setActiveTab} />
       <Player selectedSong={selectedSong} onClickNext={onClickNext} onClickPrevious={onClickPrevious} setShowSideBar={setShowSideBar} />
     </div>
   );

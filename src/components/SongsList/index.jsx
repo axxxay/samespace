@@ -1,7 +1,7 @@
 import { FiSearch } from "react-icons/fi";
 import { SongItem } from "./SongItem";
 import { Audio } from "react-loader-spinner";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TbLayoutSidebarLeftCollapse } from "react-icons/tb";
 import './style.css';
 
@@ -12,14 +12,7 @@ const apiStatusConstants = {
     failure: 'FAILURE'
 }
 
-export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, setSearchInput, apiStatus, fetchSongs, showSideBar, setShowSideBar}) => {
-    
-    const initialTab = new URLSearchParams(window.location.search).get('track') || 'FOR_YOU';
-    const [activeTab, setActiveTab] = useState(initialTab);
-
-    useEffect(() => {
-        window.history.replaceState(null, null, `?track=${activeTab}`);
-    }, [activeTab]);
+export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, setSearchInput, apiStatus, fetchSongs, showSideBar, setShowSideBar, activeTab, setActiveTab}) => {
 
     const onSearchInputChange = (e) => {
         setSearchInput(e.target.value);
@@ -66,7 +59,7 @@ export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, s
             case apiStatusConstants.inProgess:
                 return renderLoader();
             case apiStatusConstants.success:
-                return songsList.length > 0 ? renderSongsList() : renderNoSongsFound();
+                return filteredSongsList.length > 0 ? renderSongsList() : renderNoSongsFound();
             case apiStatusConstants.failure:
                 return renderFailure();
             default:
@@ -94,16 +87,16 @@ export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, s
         <>
         <div className={`transition-all duration-1000 ${showSideBar ? "sidebar-overlay" : ""}`} onClick={() => setShowSideBar(false)}></div>
         <div className={`h-[100vh] md:w-[45%] flex justify-between items-start sidebar-container sidebar-container bg-[#000] md:bg-transparent ${showSideBar && window.innerWidth <= 768 ? "sidebar-mobile-container" : ""}`}>
-            <button className='p-0 border-none bg-transparent outline-none cursor-pointer absolute top-3 right-3 md:hidden' onClick={() => setShowSideBar(false)}><TbLayoutSidebarLeftCollapse className='text-white text-2xl' /></button>
+            <button className='p-0 border-none bg-transparent outline-none cursor-pointer absolute top-3 right-3 md:hidden' onClick={() => setShowSideBar(false)}><TbLayoutSidebarLeftCollapse className='text-white text-3xl' /></button>
             <div className='min-h-[calc(100vh)] md:flex flex-col justify-between items-start w-[175px] max-w-[200px] p-6 hidden' >
                 <img src='/Logo.svg' alt='song' className='w-[125px] select-none' draggable={false} />
                 <div className='flex justify-between items-start bg-black w-12 h-12 rounded-[50%]'>
                     <img src='/Profile.png' alt='song' className='w-12 h-8 select-none' draggable={false} />
                 </div>
             </div>
-            <div className='min-h-[calc(100vh-48px)] mt-0 md:mt-7 flex flex-col items-start max-w-80% w-full md:w-[400px] p-2 md:p-0'>
+            <div className='min-h-[calc(100vh-48px)] mt-0 md:mt-7 flex flex-col items-start max-w-80% w-full md:w-[350px] lg:w-[400px] p-2 md:p-0'>
                 <img src='/Logo.svg' alt='song' className='w-[100px] select-none md:hidden' draggable={false} />
-                <div className='flex items-center justify-center md:justify-start w-full mt-2 md:mt-1'>
+                <div className='flex items-center justify-center md:justify-start w-full mt-4 md:mt-1'>
                     <button style={{opacity: activeTab === 'FOR_YOU' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-[18px] md:text-[20px] lg:text-2xl mr-10 font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("FOR_YOU")}>For You</button>
                     <button style={{opacity: activeTab === 'TOP_TRACKS' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-[18px] md:text-[20px] lg:text-2xl font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("TOP_TRACKS")}>Top Tracks</button>
                 </div>

@@ -12,7 +12,7 @@ export const Player = ({selectedSong, onClickNext, onClickPrevious, setShowSideB
 
   return (
     <div className='w-full h-[100vh] md:w-[55%] flex flex-col justify-center items-center p-6 relative'>
-      <button className='p-0 border-none bg-transparent outline-none cursor-pointer absolute top-4 left-6 md:hidden' onClick={() => setShowSideBar(true)}><TbLayoutSidebarLeftExpand className='text-white text-2xl' /></button>
+      <button className='p-0 border-none bg-transparent outline-none cursor-pointer absolute top-4 left-6 md:hidden' onClick={() => setShowSideBar(true)}><TbLayoutSidebarLeftExpand className='text-white text-3xl' /></button>
       { selectedSong ?
         <div className='w-full max-w-[400px]'>
           <h1 className='text-white text-[32px] leading-9 font-bold font-[inter]'>{selectedSong.name}</h1>
