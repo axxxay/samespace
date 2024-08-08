@@ -17,16 +17,16 @@ const App = () => {
   const [songsList, setSongsList] = useState([]);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
   const [showSideBar, setShowSideBar] = useState(false);
-
-  const [bgColor, setBgColor] = useState('#0B565B');
   const [selectedSong, setSelectedSong] = useState(null);
-
-  const initialTab = new URLSearchParams(window.location.search).get('track') || 'FOR_YOU';
+  const [bgColor, setBgColor] = useState('#0B565B');
+  const queryTab = new URLSearchParams(window.location.search).get('track');
+  const initialTab = queryTab ? (queryTab === 'TOP_TRACKS' || queryTab === 'FOR_YOU') ? queryTab : 'FOR_YOU' : 'FOR_YOU';
+  const initialSongId = parseInt(new URLSearchParams(window.location.search).get('songId')) || null;
   const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
-      window.history.replaceState(null, null, `?track=${activeTab}`);
-  }, [activeTab]);
+      window.history.replaceState(null, null, `?track=${activeTab}&songId=${selectedSong ? selectedSong.id : ''}`);
+  }, [activeTab, selectedSong]);
 
   useEffect(() => {
     setApiStatus(apiStatusConstants.inProgess);
@@ -49,7 +49,21 @@ const App = () => {
               console.log(data.data);
               setSongsList(data.data);
               if(data.data.length > 0 && !selectedSong) {
-                setSelectedSong(data.data[0]);
+                console.log(initialSongId)
+                if (initialSongId) {
+                  const song = data.data.find(song => song.id === initialSongId);
+                  console.log(song)
+                  if (song) {
+                    setSelectedSong(song);
+                    setBgColor(song.accent);
+                  } else {
+                    setSelectedSong(data.data[0]);
+                    setBgColor(data.data[0].accent);
+                  }
+                } else {
+                  setSelectedSong(data.data[0]);
+                  setBgColor(data.data[0].accent);
+                }
               }
               setApiStatus(apiStatusConstants.success);
           } else {
