@@ -13,7 +13,8 @@ const apiStatusConstants = {
 
 const App = () => {
   const ref = useRef(null);
-  const [searchInput, setSearchInput] = useState('');
+  const initialSearchInput = new URLSearchParams(window.location.search).get('search') || '';
+  const [searchInput, setSearchInput] = useState(initialSearchInput);
   const [songsList, setSongsList] = useState([]);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
   const [showSideBar, setShowSideBar] = useState(false);
@@ -25,8 +26,8 @@ const App = () => {
   const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
-      window.history.replaceState(null, null, `?track=${activeTab}&songId=${selectedSong ? selectedSong.id : ''}`);
-  }, [activeTab, selectedSong]);
+      window.history.replaceState(null, null, `?track=${activeTab}&songId=${selectedSong ? selectedSong.id : ''}${searchInput ? `&search=${searchInput}` : ''}`);
+  }, [activeTab, selectedSong, searchInput]);
 
   useEffect(() => {
     setApiStatus(apiStatusConstants.inProgess);
@@ -46,13 +47,10 @@ const App = () => {
           const response = await fetch(url);
           if (response.ok === true) {
               const data = await response.json();
-              console.log(data.data);
               setSongsList(data.data);
               if(data.data.length > 0 && !selectedSong) {
-                console.log(initialSongId)
                 if (initialSongId) {
                   const song = data.data.find(song => song.id === initialSongId);
-                  console.log(song)
                   if (song) {
                     setSelectedSong(song);
                     setBgColor(song.accent);
@@ -79,7 +77,6 @@ const App = () => {
   const onClickNext = () => {
     const currentIndex = songsList.findIndex(song => song.id === selectedSong.id);
     if (currentIndex === songsList.length - 1) {
-      console.log(currentIndex)
       setSelectedSong(songsList[0]);
       setBgColor(songsList[0].accent);
     } else {
