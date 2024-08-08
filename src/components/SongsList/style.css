@@ -1,5 +1,5 @@
 .sidebar-container {
-    left: -90%;
+    left: -150%;
     transition: left 1s ease-out;
     position: fixed;
     z-index: 1000;
@@ -24,6 +24,24 @@
     backdrop-filter: blur(3px);
     display: block;
     z-index: 50;
+}
+
+@media screen and (min-width: 320px) {
+    .sidebar-container {
+        left: -90%;
+        transition: left 1s ease-out;
+        position: fixed;
+        z-index: 1000;
+    }
+    
+    .sidebar-mobile-container {
+        display: block;
+        width: 90%;
+        max-width: 350px;
+        left: 0%;
+        transition: left 0.5s ease-in;
+        z-index: 1000;
+    }    
 }
 
 @media screen and (min-width: 768px) {
