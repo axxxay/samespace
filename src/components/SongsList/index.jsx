@@ -97,8 +97,8 @@ export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, s
             <div className='min-h-[calc(100vh-48px)] mt-0 md:mt-7 flex flex-col items-start max-w-80% w-full md:w-[350px] lg:w-[400px] p-2 md:p-0'>
                 <img src='/Logo.svg' alt='song' className='w-[100px] select-none md:hidden' draggable={false} />
                 <div className='flex items-center justify-center md:justify-start w-full mt-4 md:mt-1'>
-                    <button style={{opacity: activeTab === 'FOR_YOU' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-[18px] md:text-[20px] lg:text-2xl mr-10 font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("FOR_YOU")}>For You</button>
-                    <button style={{opacity: activeTab === 'TOP_TRACKS' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-[18px] md:text-[20px] lg:text-2xl font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("TOP_TRACKS")}>Top Tracks</button>
+                    <button style={{opacity: activeTab === 'FOR_YOU' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-[18px] md:text-[19px] lg:text-2xl mr-10 font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("FOR_YOU")}>For You</button>
+                    <button style={{opacity: activeTab === 'TOP_TRACKS' ? "1.0" : "0.5"}} className='text-white hover:opacity-70 text-[18px] md:text-[19px] lg:text-2xl font-bold font-[inter] border-none bg-transparent p-0' onClick={() => setActiveTab("TOP_TRACKS")}>Top Tracks</button>
                 </div>
                 <div className='flex justify-between items-center bg-[#ffffff15] rounded-lg py-[8px] px-[16px] mt-3 md:mt-6 w-full'>
                     <input 
@@ -110,7 +110,7 @@ export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, s
                     />
                     <FiSearch className='text-[#ffffff60] text-xl' />
                 </div>
-                <ul className='w-full mt-4 md:mt-5 flex flex-col justify-start items-start h-[71vh] md:h-[79.5vh] overflow-auto'>
+                <ul className='w-full mt-4 md:mt-5 flex flex-col justify-start items-start h-[71vh] md:h-[77.5vh] lg:h-[79.5vh] overflow-auto'>
                     {renderSwitch()}
                 </ul>
                 <div className='flex justify-between items-start bg-black w-9 h-9 rounded-[50%] mt-2 md:hidden'>
