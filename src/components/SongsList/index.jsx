@@ -12,7 +12,7 @@ const apiStatusConstants = {
     failure: 'FAILURE'
 }
 
-export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, setSearchInput, apiStatus, fetchSongs, showSideBar, setShowSideBar, activeTab, setActiveTab}) => {
+export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, setSearchInput, apiStatus, fetchSongs, showSideBar, setShowSideBar, activeTab, setActiveTab, itemRef}) => {
 
     const onSearchInputChange = (e) => {
         setSearchInput(e.target.value);
@@ -24,7 +24,7 @@ export const SongsList = ({onSelectSong, selectedSong, songsList, searchInput, s
     }
 
     const renderSongsList = () => (
-        filteredSongsList.map(song => <SongItem key={song.id} song={song} onSelectSong={onSelectSong} selectedSong={selectedSong} />)
+        filteredSongsList.map(song => <SongItem key={song.id} song={song} onSelectSong={onSelectSong} selectedSong={selectedSong} itemRef={itemRef} />)
     )
 
     const renderNoSongsFound = () => (

@@ -1,9 +1,9 @@
-export const SongItem = ({ song, onSelectSong, selectedSong }) => {
+export const SongItem = ({ song, onSelectSong, selectedSong, itemRef }) => {
 
     const isSelected = selectedSong && selectedSong.id === song.id;
 
     return (
-        <li style={{backgroundColor: isSelected ? '#ffffff20' : 'transparent'}} className='flex justify-between items-center rounded-lg py-2 md:py-4 px-3 w-full cursor-pointer hover:bg-[#ffffff10!important] transition-all duration-300' onClick={() => onSelectSong(song)}>
+        <li ref={itemRef} style={{backgroundColor: isSelected ? '#ffffff20' : 'transparent'}} className='flex justify-between items-center rounded-lg py-2 md:py-4 px-3 w-full cursor-pointer hover:bg-[#ffffff10!important] transition-all duration-300' onClick={() => onSelectSong(song)}>
             <div className='flex items-center'>
                 <img src={`https://cms.samespace.com/assets/${song.cover}`} alt={song.name} draggable={false} className='w-10 h-10 md:w-12 md:h-12 mr-4 rounded-[50%] select-none' />
                 <div>

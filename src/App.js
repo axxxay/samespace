@@ -13,6 +13,7 @@ const apiStatusConstants = {
 
 const App = () => {
   const ref = useRef(null);
+  const itemRef = useRef(null);
   const initialSearchInput = new URLSearchParams(window.location.search).get('search') || '';
   const [searchInput, setSearchInput] = useState(initialSearchInput);
   const [songsList, setSongsList] = useState([]);
@@ -39,6 +40,12 @@ const App = () => {
 
       return () => clearTimeout(delayDebounceFn);
   }, [searchInput]);
+
+  const moveItemUp = () => {
+    if (itemRef.current) {
+      itemRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  };
 
   const fetchSongs = async () => {
       try {
@@ -83,6 +90,7 @@ const App = () => {
       setSelectedSong(songsList[currentIndex + 1]);
       setBgColor(songsList[currentIndex + 1].accent);
     }
+    moveItemUp();
   }
 
   const onClickPrevious = () => {
@@ -94,6 +102,7 @@ const App = () => {
       setSelectedSong(songsList[currentIndex - 1]);
       setBgColor(songsList[currentIndex - 1].accent);
     }
+    moveItemUp();
   }
 
   useEffect(() => {
@@ -110,6 +119,7 @@ const App = () => {
   const onSelectSong = (song) => {
     setSelectedSong(song);
     setBgColor(song.accent);
+    moveItemUp();
   };
 
   return (
@@ -125,8 +135,26 @@ const App = () => {
         width: '100%',
       }}
     >
-      <SongsList onSelectSong={onSelectSong} selectedSong={selectedSong} searchInput={searchInput} setSearchInput={setSearchInput} songsList={songsList} apiStatus={apiStatus} fetchSongs={fetchSongs} showSideBar={showSideBar} setShowSideBar={setShowSideBar} activeTab={activeTab} setActiveTab={setActiveTab} />
-      <Player selectedSong={selectedSong} onClickNext={onClickNext} onClickPrevious={onClickPrevious} setShowSideBar={setShowSideBar} />
+      <SongsList 
+        onSelectSong={onSelectSong} 
+        selectedSong={selectedSong} 
+        searchInput={searchInput} 
+        setSearchInput={setSearchInput} 
+        songsList={songsList} 
+        apiStatus={apiStatus} 
+        fetchSongs={fetchSongs} 
+        showSideBar={showSideBar} 
+        setShowSideBar={setShowSideBar} 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        itemRef={itemRef}
+      />
+      <Player 
+        selectedSong={selectedSong} 
+        onClickNext={onClickNext} 
+        onClickPrevious={onClickPrevious} 
+        setShowSideBar={setShowSideBar} 
+      />
     </div>
   );
 };
